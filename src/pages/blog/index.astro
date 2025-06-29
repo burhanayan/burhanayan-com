@@ -32,7 +32,6 @@ const posts = (await getCollection('blog')).sort(
 				width: calc(100% - 1rem);
 			}
 			ul li * {
-				width: calc(60%);
 				text-decoration: none;
 				transition: 0.2s ease;
 			}
@@ -68,25 +67,97 @@ const posts = (await getCollection('blog')).sort(
 					text-align: center;
 				}
 			}
+			.blog-list {
+				display: flex;
+				flex-direction: column;
+				gap: 2rem;
+				margin: 0;
+				padding: 0;
+			}
+			.blog-list-item {
+				display: flex;
+				align-items: flex-start;
+				gap: 1.2rem;
+				width: 100%;
+			}
+			.blog-list-image {
+				flex-shrink: 0;
+				height: 190px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			.blog-list-image img {
+				height: 100%;
+				width: auto;
+				object-fit: cover;
+				border-radius: 16px;
+				box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
+			}
+			.blog-list-content {
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-start;
+				flex: 1;
+				min-width: 0;
+			}
+			.blog-list-title {
+				font-size: 1.5rem;
+				font-weight: 700;
+				margin: 0 0 0.5rem 0;
+				color: #111;
+				line-height: 1.1;
+				word-break: break-word;
+			}
+			.blog-list-date {
+				margin: 0 0 1.1rem 0;
+				color: #787878;
+				font-weight: 500;
+				font-size: 0.9rem;
+			}
+			.blog-list-preview {
+				min-height: 70px;
+				color: #5e5959;
+				font-size: 1.0rem;
+				margin-bottom: 0.2rem;
+			}
+			@media (max-width: 900px) {
+				.blog-list-item {
+					flex-direction: column;
+					align-items: stretch;
+					gap: 1.2rem;
+				}
+				.blog-list-image {
+					width: 100%;
+					height: 180px;
+				}
+			}
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
 			<section>
-				<ul>
+				<ul class="blog-list">
 					{
 						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
+							<li class="blog-list-item">
+								{post.data.heroImage && (
+									<a href={`/blog/${post.id}/`} class="blog-list-image">
+										<Image width={340} height={190} src={post.data.heroImage} alt="" />
+									</a>
+								)}
+								<div class="blog-list-content">
+									<a href={`/blog/${post.id}/`} style="text-decoration: none; color: inherit;">
+										<div class="blog-list-title">{post.data.title}</div>
+									</a>
+									<div class="blog-list-date">
 										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
+									</div>
+									<div class="blog-list-preview">
+										{post.data.description}
+									</div>
+								</div>
 							</li>
 						))
 					}
